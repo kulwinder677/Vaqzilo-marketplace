@@ -6,141 +6,422 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VAQZILO Marketplace</title>
 <style>
-body{font-family:Arial;margin:0;background:#f4f6fa;color:#222}
-header{background:#151b35;color:white;padding:18px;text-align:center}
-nav{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:12px}
-button{background:#2563eb;color:white;border:0;border-radius:8px;padding:11px;cursor:pointer}
-input{padding:12px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box;width:100%;margin:5px 0}
-section{background:white;margin:14px;padding:18px;border-radius:12px}
-.product{border:1px solid #ddd;padding:14px;margin:10px 0;border-radius:10px}
-.price{color:green;font-weight:bold}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f5f8;color:#182033}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{background:#10182d;color:white;padding:15px}
+.top{display:flex;align-items:center;gap:15px;flex-wrap:wrap;max-width:1200px;margin:auto}
+.logo{font-size:30px;font-weight:900;letter-spacing:2px;color:white}
+.logo:after{content:"";display:block;width:70%;height:4px;background:#ff9100;border-radius:50%;margin-left:20px}
+.search{display:flex;flex:1;min-width:220px}
+.search input{width:100%;padding:13px;border:0;border-radius:10px 0 0 10px;outline:none}
+.search button{background:#ff9100;border:0;color:white;padding:0 18px;border-radius:0 10px 10px 0}
+.actions{display:flex;gap:8px}
+.actions button{background:none;border:0;color:white;font-size:13px}
+nav{display:flex;gap:24px;justify-content:center;overflow-x:auto;padding:15px 5px}
+nav button{background:none;border:0;color:white;white-space:nowrap;font-weight:bold}
+nav button:hover{color:#ff9100}
+main{max-width:1200px;margin:auto}
+.hero{margin:16px;background:linear-gradient(110deg,#111b34,#263b61,#ec8738);color:white;border-radius:17px;padding:35px;display:flex;align-items:center;min-height:290px}
+.hero h1{font-size:clamp(35px,6vw,65px);margin:10px 0}
+.hero p{font-size:19px}
+.hero-art{flex:1;text-align:center;font-size:90px}
+.btn{background:#ff9100;color:white;border:0;border-radius:9px;padding:12px 20px;font-weight:bold;margin:5px}
+.btn-outline{background:transparent;border:2px solid white}
+.categories{display:grid;grid-template-columns:repeat(9,minmax(95px,1fr));gap:10px;overflow-x:auto;padding:10px 16px}
+.category{background:white;border-radius:14px;text-align:center;padding:16px 5px;cursor:pointer;box-shadow:0 2px 8px #0000000b}
+.category span{display:block;font-size:34px;margin-bottom:8px}
+.category b{font-size:12px}
+section{padding:15px}
+.section-title{display:flex;justify-content:space-between;align-items:center}
+.section-title h2{font-size:24px}
+.products{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.product{background:white;border-radius:14px;padding:12px;position:relative;box-shadow:0 3px 10px #0000000d}
+.product img{width:100%;height:150px;object-fit:contain}
+.product h3{font-size:15px;min-height:36px}
+.price{color:#b11126;font-size:19px;font-weight:bold}
+.old{text-decoration:line-through;color:#777;font-size:13px;margin-left:6px}
+.discount{position:absolute;right:8px;top:8px;background:#e11d48;color:white;padding:5px;border-radius:7px;font-size:12px}
+.heart{position:absolute;left:8px;top:8px;background:white;border:0;border-radius:50%;font-size:21px}
+.add{width:100%;background:#ff9100;color:white;border:0;border-radius:9px;padding:11px;margin-top:10px;font-weight:bold}
+.banners{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:15px}
+.banner{padding:24px;border-radius:15px;min-height:180px;display:flex;align-items:center;gap:15px}
+.banner h2{margin:0;font-size:25px}
+.banner .emoji{font-size:65px}
+.seller-banner{background:linear-gradient(110deg,#592c96,#382174);color:white}
+.delivery-banner{background:linear-gradient(110deg,#91d4fa,#d2f1ff)}
+.banner button{background:white;border:0;border-radius:20px;padding:10px 17px;font-weight:bold;margin-top:10px}
+.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:white;margin:15px;border-radius:14px;padding:20px}
+.benefit span{font-size:28px}
+.benefit b{display:block}
+.benefit small{color:#666}
+.page{display:none}
+.page.active{display:block}
+.panel{background:white;padding:22px;border-radius:14px;margin:18px}
+.field{width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;border-radius:8px}
+.cart-row{padding:13px 0;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;gap:10px}
+footer{background:#10182d;color:white;text-align:center;padding:25px;margin-top:20px}
+.note{color:#666;font-size:12px}
+@media(max-width:750px){
+.top{gap:10px}
+.logo{font-size:25px}
+.search{order:3;flex-basis:100%}
+.actions{margin-left:auto}
+.actions button{font-size:11px}
+nav{justify-content:flex-start;gap:14px}
+.hero{padding:22px;min-height:220px}
+.hero-art{font-size:55px}
+.hero p{font-size:14px}
+.products{grid-template-columns:repeat(2,minmax(0,1fr))}
+.product img{height:120px}
+.banners{grid-template-columns:1fr}
+.benefits{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
+
 <header>
-<h1>VAQZILO</h1>
-<p>Buy & Sell Marketplace</p>
+<div class="top">
+<div class="logo">VAQZILO</div>
+<div class="search">
+<input id="searchInput" placeholder="Search for products, brands and more..." oninput="renderProducts()">
+<button onclick="renderProducts()">🔍</button>
+</div>
+<div class="actions">
+<button onclick="showPage('seller')">🏪 Sell</button>
+<button onclick="showPage('account')">👤 Account</button>
+<button onclick="showPage('cart')">🛒 Cart <span id="cartCount">0</span></button>
+</div>
+</div>
+<nav>
+<button onclick="showPage('home')">⌂ Home</button>
+<button onclick="filterProducts('all')">🔥 Deals</button>
+<button onclick="filterProducts('new')">✨ New Arrivals</button>
+<button onclick="filterProducts('best')">⭐ Best Sellers</button>
+<button onclick="showPage('wishlist')">♡ Wishlist</button>
+</nav>
 </header>
 
-<nav>
-<button onclick="show('shop')">Shop</button>
-<button onclick="show('seller')">Sell</button>
-<button onclick="show('cart')">Cart 🛒 <span id="count">0</span></button>
-<button onclick="show('account')">Account</button>
-</nav>
+<main>
+<div id="home" class="page active">
 
-<section id="shop">
-<h2>Explore Products</h2>
-<input id="search" placeholder="Search products..." oninput="render()">
-<div id="products"></div>
+<div class="hero">
+<div>
+<h2>Buy & Sell on</h2>
+<h1>VAQZILO</h1>
+<p>A Global Marketplace for Everyone</p>
+<button class="btn" onclick="document.getElementById('deals').scrollIntoView()">Shop Now →</button>
+<button class="btn btn-outline" onclick="showPage('seller')">Start Selling</button>
+</div>
+<div class="hero-art">🛒📦</div>
+</div>
+
+<div class="categories" id="categories"></div>
+
+<section id="deals">
+<div class="section-title">
+<h2>⚡ Today's Deals</h2>
+<button class="btn" onclick="filterProducts('all')">View All →</button>
+</div>
+<div class="products" id="productGrid"></div>
 </section>
 
-<section id="seller" hidden>
-<h2>Sell Your Product</h2>
-<input id="name" placeholder="Product name">
-<input id="price" type="number" min="0.01" step="0.01" placeholder="Price CAD">
-<input id="description" placeholder="Description">
-<button onclick="addProduct()">Publish Product</button>
-<p id="sellerMessage"></p>
-</section>
+<div class="banners">
+<div class="banner seller-banner">
+<div class="emoji">🏪</div>
+<div>
+<h2>Become a Seller on VAQZILO</h2>
+<p>Start selling your products today.</p>
+<button onclick="showPage('seller')">Start Selling →</button>
+</div>
+</div>
+<div class="banner delivery-banner">
+<div class="emoji">🚚</div>
+<div>
+<h2>Fast & Reliable Delivery</h2>
+<p>Shop with confidence.</p>
+<button onclick="alert('Delivery integration coming soon.')">Learn More →</button>
+</div>
+</div>
+</div>
 
-<section id="cart" hidden>
-<h2>Your Shopping Cart</h2>
+<div class="benefits">
+<div class="benefit"><span>🛡️</span><b>Secure Payments</b><small>Coming soon</small></div>
+<div class="benefit"><span>🚚</span><b>Fast Delivery</b><small>Coming soon</small></div>
+<div class="benefit"><span>🔄</span><b>Easy Returns</b><small>Coming soon</small></div>
+<div class="benefit"><span>🎧</span><b>Customer Support</b><small>Coming soon</small></div>
+</div>
+</div>
+
+<div id="seller" class="page">
+<div class="panel">
+<h2>🏪 Seller Center</h2>
+<p>List a product on VAQZILO.</p>
+<form id="sellerForm">
+<input class="field" id="sellerName" placeholder="Seller Name" required>
+<input class="field" id="productName" placeholder="Product Name" required>
+<input class="field" id="productPrice" type="number" min="0.01" step="0.01" placeholder="Price CAD" required>
+<input class="field" id="productImage" type="url" placeholder="Product Image URL (optional)">
+<select class="field" id="productCategory">
+<option>Electronics</option>
+<option>Home & Living</option>
+<option>Fashion</option>
+<option>Sports & Fitness</option>
+<option>Kitchen & Home</option>
+<option>Beauty & Care</option>
+<option>Toys & Games</option>
+<option>Auto & Tools</option>
+</select>
+<button class="btn" type="submit">Publish Product</button>
+</form>
+<p class="note">Demo only: products are saved in this browser, not shared with other users.</p>
+</div>
+</div>
+
+<div id="cart" class="page">
+<div class="panel">
+<h2>🛒 Shopping Cart</h2>
 <div id="cartItems"></div>
-<h3 id="total"></h3>
-<button onclick="checkout()">Demo Checkout</button>
-<p id="checkoutMessage"></p>
-</section>
+<h2 id="cartTotal">Total: CAD $0.00</h2>
+<button class="btn" onclick="alert('Online checkout is not connected yet.')">Checkout</button>
+</div>
+</div>
 
-<section id="account" hidden>
-<h2>Customer / Seller Account</h2>
-<input id="username" placeholder="Your name">
-<input id="email" type="email" placeholder="Email">
-<button onclick="saveAccount()">Save Demo Profile</button>
-<p id="accountMessage"></p>
-</section>
+<div id="wishlist" class="page">
+<div class="panel">
+<h2>♡ Wishlist</h2>
+<div id="wishlistItems"></div>
+</div>
+</div>
+
+<div id="account" class="page">
+<div class="panel">
+<h2>👤 My Account</h2>
+<input class="field" type="email" placeholder="Email">
+<input class="field" type="password" placeholder="Password">
+<button class="btn" onclick="alert('Secure login is coming soon.')">Login / Sign Up</button>
+</div>
+</div>
+</main>
+
+<footer>
+<h2>VAQZILO</h2>
+<p>Shop Smart. Sell Easy.</p>
+<p>© 2026 VAQZILO Marketplace</p>
+</footer>
 
 <script>
-const initial=[
-{name:"Wireless Headphones",price:39.99,description:"Bluetooth headphones"},
-{name:"Smart Watch",price:59.99,description:"Everyday smartwatch"},
-{name:"Kitchen Organizer",price:24.99,description:"Home storage organizer"}
+const categories=[
+["📱","Electronics"],
+["🛋️","Home & Living"],
+["👕","Fashion"],
+["🏋️","Sports & Fitness"],
+["🍳","Kitchen & Home"],
+["💄","Beauty & Care"],
+["🧸","Toys & Games"],
+["🚗","Auto & Tools"],
+["▦","All Categories"]
 ];
-let products=JSON.parse(localStorage.getItem("vq_products")||"null")||initial;
-let cart=[];
 
-function show(id){
-document.querySelectorAll("section").forEach(s=>s.hidden=true);
-document.getElementById(id).hidden=false;
-if(id==="cart")renderCart();
+const starter=[
+{name:"Wireless Headphones",price:59.99,old:99.99,category:"Electronics",tag:"best",image:"https://placehold.co/400x300?text=Headphones"},
+{name:"Smart Watch",price:64.99,old:99.99,category:"Electronics",tag:"new",image:"https://placehold.co/400x300?text=Smart+Watch"},
+{name:"Air Fryer 5.5L",price:89.99,old:129.99,category:"Kitchen & Home",tag:"best",image:"https://placehold.co/400x300?text=Air+Fryer"},
+{name:"Men's Sneakers",price:74.99,old:99.99,category:"Fashion",tag:"new",image:"https://placehold.co/400x300?text=Sneakers"},
+{name:"Bluetooth Speaker",price:29.99,old:49.99,category:"Electronics",tag:"best",image:"https://placehold.co/400x300?text=Speaker"}
+];
+
+function load(key,fallback){
+try{
+const value=JSON.parse(localStorage.getItem(key));
+return Array.isArray(value)?value:fallback;
+}catch(e){return fallback;}
 }
-function render(){
-let q=document.getElementById("search").value.toLowerCase();
-let box=document.getElementById("products");
-box.innerHTML="";
+
+let products=load("vqProducts",starter);
+let cart=load("vqCart",[]);
+let wishlist=load("vqWishlist",[]);
+let filter="all";
+
+function save(){
+try{
+localStorage.setItem("vqProducts",JSON.stringify(products));
+localStorage.setItem("vqCart",JSON.stringify(cart));
+localStorage.setItem("vqWishlist",JSON.stringify(wishlist));
+}catch(e){alert("Storage unavailable.");}
+}
+
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+if(id==="cart")renderCart();
+if(id==="wishlist")renderWishlist();
+window.scrollTo(0,0);
+}
+
+function filterProducts(value){
+filter=value;
+document.getElementById("searchInput").value="";
+showPage("home");
+renderProducts();
+document.getElementById("deals").scrollIntoView();
+}
+
+function renderCategories(){
+const area=document.getElementById("categories");
+categories.forEach(c=>{
+const item=document.createElement("div");
+item.className="category";
+const emoji=document.createElement("span");
+emoji.textContent=c[0];
+const title=document.createElement("b");
+title.textContent=c[1];
+item.append(emoji,title);
+item.onclick=()=>filterProducts(c[1]==="All Categories"?"all":c[1]);
+area.append(item);
+});
+}
+
+function renderProducts(){
+const area=document.getElementById("productGrid");
+area.replaceChildren();
+const search=document.getElementById("searchInput").value.toLowerCase();
 products.forEach((p,i)=>{
-if(!p.name.toLowerCase().includes(q))return;
-let div=document.createElement("div");
-div.className="product";
-let title=document.createElement("h3");
-title.textContent=p.name;
-let price=document.createElement("p");
+if(!p.name.toLowerCase().includes(search))return;
+if(filter!=="all"&&p.category!==filter&&p.tag!==filter)return;
+
+const card=document.createElement("div");
+card.className="product";
+const heart=document.createElement("button");
+heart.className="heart";
+heart.textContent=wishlist.includes(i)?"♥":"♡";
+heart.onclick=()=>{
+wishlist=wishlist.includes(i)?wishlist.filter(x=>x!==i):[...wishlist,i];
+save();renderProducts();
+};
+
+const img=document.createElement("img");
+img.src=p.image;
+img.alt=p.name;
+img.onerror=()=>{
+img.onerror=null;
+img.src="https://placehold.co/400x300?text=Product";
+};
+
+const name=document.createElement("h3");
+name.textContent=p.name;
+const price=document.createElement("div");
 price.className="price";
 price.textContent="$"+Number(p.price).toFixed(2)+" CAD";
-let desc=document.createElement("p");
-desc.textContent=p.description;
-let btn=document.createElement("button");
-btn.textContent="Add to Cart";
-btn.onclick=()=>{cart.push(i);updateCount();alert("Added to cart!")};
-div.append(title,price,desc,btn);
-box.append(div);
+
+if(p.old&&p.old>p.price){
+const old=document.createElement("span");
+old.className="old";
+old.textContent="$"+Number(p.old).toFixed(2);
+price.append(old);
+const badge=document.createElement("span");
+badge.className="discount";
+badge.textContent="-"+Math.round((1-p.price/p.old)*100)+"%";
+card.append(badge);
+}
+
+const add=document.createElement("button");
+add.className="add";
+add.textContent="🛒 Add to Cart";
+add.onclick=()=>{
+cart.push(i);save();updateCount();
+alert("Added to cart!");
+};
+card.append(heart,img,name,price,add);
+area.append(card);
 });
+if(!area.children.length)area.textContent="No products found.";
 }
-function addProduct(){
-let name=document.getElementById("name").value.trim();
-let price=Number(document.getElementById("price").value);
-let description=document.getElementById("description").value.trim();
-if(!name||!Number.isFinite(price)||price<=0){
-alert("Enter a product name and valid price");return;
-}
-products.push({name,price,description});
-localStorage.setItem("vq_products",JSON.stringify(products));
-document.getElementById("sellerMessage").textContent="Product saved in this browser!";
-document.getElementById("name").value="";
-document.getElementById("price").value="";
-document.getElementById("description").value="";
-render();
-}
+
 function updateCount(){
-document.getElementById("count").textContent=cart.length;
+document.getElementById("cartCount").textContent=cart.length;
 }
+
 function renderCart(){
-let box=document.getElementById("cartItems");
-box.innerHTML="";
+const area=document.getElementById("cartItems");
+area.replaceChildren();
 let total=0;
-cart.forEach(i=>{
-let p=products[i];
+cart.forEach((index,pos)=>{
+const p=products[index];
+if(!p)return;
 total+=Number(p.price);
-let line=document.createElement("p");
-line.textContent=p.name+" — $"+Number(p.price).toFixed(2);
-box.append(line);
+const row=document.createElement("div");
+row.className="cart-row";
+const label=document.createElement("span");
+label.textContent=p.name+" — $"+Number(p.price).toFixed(2);
+const remove=document.createElement("button");
+remove.className="btn";
+remove.textContent="Remove";
+remove.onclick=()=>{
+cart.splice(pos,1);save();updateCount();renderCart();
+};
+row.append(label,remove);
+area.append(row);
 });
-document.getElementById("total").textContent="Total: $"+total.toFixed(2)+" CAD";
+if(!cart.length)area.textContent="Your cart is empty.";
+document.getElementById("cartTotal").textContent="Total: CAD $"+total.toFixed(2);
 }
-function checkout(){
-document.getElementById("checkoutMessage").textContent=
-"Demo only — no payment or real order placed.";
+
+function renderWishlist(){
+const area=document.getElementById("wishlistItems");
+area.replaceChildren();
+wishlist.forEach(index=>{
+const p=products[index];
+if(!p)return;
+const row=document.createElement("div");
+row.className="cart-row";
+const label=document.createElement("span");
+label.textContent=p.name;
+const btn=document.createElement("button");
+btn.className="btn";
+btn.textContent="Add to Cart";
+btn.onclick=()=>{
+cart.push(index);save();updateCount();
+alert("Added to cart!");
+};
+row.append(label,btn);
+area.append(row);
+});
+if(!wishlist.length)area.textContent="Your wishlist is empty.";
 }
-function saveAccount(){
-let name=document.getElementById("username").value.trim();
-let email=document.getElementById("email").value.trim();
-if(!name||!email.includes("@")){
-alert("Enter your name and valid email");return;
+
+document.getElementById("sellerForm").addEventListener("submit",function(e){
+e.preventDefault();
+const name=document.getElementById("productName").value.trim();
+const price=Number(document.getElementById("productPrice").value);
+const image=document.getElementById("productImage").value.trim();
+const category=document.getElementById("productCategory").value;
+
+if(!name||!Number.isFinite(price)||price<=0){
+alert("Enter a valid name and price.");
+return;
 }
-document.getElementById("accountMessage").textContent=
-"Demo profile saved for this session. Not a real account.";
-}
-render();
+
+products.push({
+name,price,category,tag:"new",
+image:image||"https://placehold.co/400x300?text=New+Product"
+});
+save();
+this.reset();
+filter="all";
+document.getElementById("searchInput").value="";
+renderProducts();
+showPage("home");
+alert("Product added to demo!");
+});
+
+renderCategories();
+renderProducts();
+updateCount();
 </script>
 </body>
 </html>
+
+
