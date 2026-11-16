@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VAQZILO Marketplace</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f4f6;color:#172033}
+header{background:#111827;color:white;padding:18px}
+.logo{font-size:28px;font-weight:900;letter-spacing:2px}
+.tagline{font-size:12px;color:#cbd5e1}
+.search{display:flex;margin-top:16px}
+input{padding:12px;border:1px solid #ddd;border-radius:6px;min-width:0;flex:1}
+button{padding:12px;border:0;border-radius:6px;background:#ffb703;color:#111;font-weight:bold;cursor:pointer}
+nav{display:flex;gap:18px;background:#243047;color:white;padding:13px;overflow:auto}
+nav a{color:white;text-decoration:none;white-space:nowrap}
+.hero{text-align:center;padding:45px 20px;background:linear-gradient(120deg,#172554,#2563eb);color:white}
+.hero h1{font-size:32px}
+.container{padding:20px;max-width:1100px;margin:auto}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.card{background:white;border-radius:12px;padding:14px;box-shadow:0 2px 8px #0001}
+.photo{height:120px;background:#e2e8f0;border-radius:8px;display:grid;place-items:center;font-size:55px}
+.price{color:#047857;font-weight:bold}
+.card button{width:100%}
+.cart{background:white;padding:20px;margin-top:25px;border-radius:12px}
+footer{text-align:center;background:#111827;color:white;padding:25px;margin-top:30px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">VAQZILO</div>
+<div class="tagline">Your World. Your Marketplace.</div>
+<div class="search">
+<input id="search" placeholder="Search products..." oninput="render()">
+<button onclick="render()">Search</button>
+</div>
+</header>
+<nav>
+<a href="#products">Shop</a>
+<a href="#cart">Cart 🛒</a>
+<a href="#seller">Sell on VAQZILO</a>
+</nav>
+<section class="hero">
+<h1>Welcome to VAQZILO</h1>
+<p>Discover amazing products in one place.</p>
+<button onclick="document.getElementById('products').scrollIntoView()">Shop Now</button>
+</section>
+<main class="container">
+<h2 id="products">Featured Products</h2>
+<div class="grid" id="grid"></div>
+<section class="cart" id="cart">
+<h2>🛒 Shopping Cart</h2>
+<div id="items">Your cart is empty.</div>
+<h3 id="total">Total: CAD $0.00</h3>
+<button onclick="alert('Checkout is coming soon. No payments are enabled.')">Checkout</button>
+</section>
+<section class="cart" id="seller">
+<h2>Become a Seller</h2>
+<p>VAQZILO plans to welcome independent sellers.</p>
+<button onclick="alert('Seller registration is coming soon.')">Start Selling</button>
+</section>
+</main>
+<footer>© 2026 VAQZILO Marketplace</footer>
+<script>
+const products=[
+{name:"Wireless Headphones",price:49.99,icon:"🎧"},
+{name:"Smart Watch",price:79.99,icon:"⌚"},
+{name:"Running Shoes",price:59.99,icon:"👟"},
+{name:"Travel Backpack",price:39.99,icon:"🎒"},
+{name:"Coffee Maker",price:69.99,icon:"☕"},
+{name:"Desk Lamp",price:29.99,icon:"💡"},
+{name:"Sunglasses",price:24.99,icon:"🕶️"},
+{name:"Phone Case",price:19.99,icon:"📱"}
+];
+let cart=[];
+function render(){
+const q=document.getElementById("search").value.toLowerCase();
+document.getElementById("grid").innerHTML=products
+.map((p,i)=>({...p,i}))
+.filter(p=>p.name.toLowerCase().includes(q))
+.map(p=>`<article class="card">
+<div class="photo">${p.icon}</div>
+<h3>${p.name}</h3>
+<p class="price">CAD $${p.price.toFixed(2)}</p>
+<button onclick="add(${p.i})">Add to Cart</button>
+</article>`).join("")||"<p>No products found.</p>";
+}
+function add(i){
+cart.push(products[i]);
+updateCart();
+}
+function removeItem(i){
+cart.splice(i,1);
+updateCart();
+}
+function updateCart(){
+document.getElementById("items").innerHTML=cart.length?
+cart.map((p,i)=>`<p>${p.icon} ${p.name} - $${p.price.toFixed(2)} <button onclick="removeItem(${i})">Remove</button></p>`).join(""):
+"Your cart is empty.";
+document.getElementById("total").textContent=
+"Total: CAD $"+cart.reduce((s,p)=>s+p.price,0).toFixed(2);
+}
+render();
+</script>
+</body>
+</html>
