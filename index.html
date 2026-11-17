@@ -440,8 +440,41 @@ async function trackShipment(trackingNumber) {
 
   return await response.json();
 }
+async function checkTracking() {
+  const number = document.getElementById("trackingInput").value.trim();
+  const result = document.getElementById("trackingResult");
+
+  if (!number) {
+    result.textContent = "Please enter a tracking number.";
+    return;
+  }
+
+  result.textContent = "Checking shipment...";
+
+  try {
+    const shipments = await trackShipment(number);
+
+    if (!shipments.length) {
+      result.textContent = "Tracking number not found.";
+      return;
+    }
+
+    result.textContent = "Shipping Status: " + shipments[0].status;
+  } catch (error) {
+    result.textContent = "Unable to check tracking right now.";
+  }
+}
 </script>
-</body>
+  
+<section id="tracking-section" style="padding:20px;text-align:center">
+  <h2>Track Your Order</h2>
+  <input id="trackingInput" type="text"
+    placeholder="Enter tracking number">
+  <button onclick="checkTracking()">Track Order</button>
+  <p id="trackingResult"></p>
+</section>
+
+  </body>
 </html>
 
 
