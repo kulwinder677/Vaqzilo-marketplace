@@ -423,7 +423,7 @@ renderProducts();
 updateCount();
 // VAQZILO Supabase configuration
 const SUPABASE_URL = "https://ggxmclalwlikepcqfhgv.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_dktLqd-_G_AF6fM-dDBUqA_k0eVQ0Un";
+const SUPABASE_ANON_KEY = "";sb_publishable_dktLqd-_G_AF6fM-dDBUqA_k0eVQ0Un"
 async function trackShipment(trackingNumber) {
   const response = await fetch(
     `${SUPABASE_URL}/rest/v1/shipments?tracking_number=eq.${encodeURIComponent(trackingNumber)}&select=status,carrier,shipped_at,delivered_at`,
