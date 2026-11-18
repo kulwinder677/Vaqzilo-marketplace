@@ -440,36 +440,60 @@ async function trackShipment(trackingNumber) {
 
   return await response.json();
 }
+
 async function checkTracking() {
   const number = document.getElementById("trackingInput").value.trim();
+  const code = document.getElementById("verificationInput").value.trim();
   const result = document.getElementById("trackingResult");
 
-  if (!number) {
-    result.textContent = "Please enter a tracking number.";
+  if (!number || !code) {
+    result.textContent = "Enter tracking number and verification code.";
     return;
   }
 
-  result.textContent = "Checking shipment...";
+  result.textContent = "Checking your order...";
 
   try {
-    const shipments = await trackShipment(number);
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/track-order`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+        },
+        body: JSON.stringify({
+          tracking_number: number,
+          verification_code: code
+        })
+      }
+    );
 
-    if (!shipments.length) {
-      result.textContent = "Tracking number not found.";
+    const data = await response.json();
+
+    if (!response.ok) {
+      result.textContent =
+        data.error || "Unable to track order.";
       return;
     }
 
-    result.textContent = "Shipping Status: " + shipments[0].status;
+    result.textContent =
+      "Shipping Status: " + data.shipping_status +
+      " | Carrier: " + (data.shipping_carrier || "Not assigned");
   } catch (error) {
-    result.textContent = "Unable to check tracking right now.";
+    result.textContent = "Unable to connect to tracking service.";
   }
 }
+
 </script>
   
 <section id="tracking-section" style="padding:20px;text-align:center">
   <h2>Track Your Order</h2>
   <input id="trackingInput" type="text"
     placeholder="Enter tracking number">
+<input id="verificationInput" type="text" placeholder="Enter verification code" autocomplete="off">
+
   <button onclick="checkTracking()">Track Order</button>
   <p id="trackingResult"></p>
 </section>
