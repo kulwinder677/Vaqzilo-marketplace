@@ -508,7 +508,19 @@ async function checkTracking() {
     style="padding:12px;width:100%;margin:5px 0">
   <button onclick="sellerAuth('signup')">Sign Up</button>
   <button onclick="sellerAuth('login')">Login</button>
-  <p id="sellerMessage" role="status"></p>
+<button type="button" onclick="forgotSellerPassword()">Forgot Password?</button>
+ <p id="sellerMessage" role="status"></p>
+</section>
+<section id="resetPasswordSection" style="display:none;padding:20px;max-width:420px;margin:20px auto">
+  <h2>Create New Password</h2>
+  <input id="newSellerPassword" type="password"
+    placeholder="New password (minimum 6 characters)"
+    minlength="6" autocomplete="new-password"
+    class="field">
+  <button type="button" onclick="updateSellerPassword()">
+    Save New Password
+  </button>
+  <p id="resetPasswordMessage" role="status"></p>
 </section>
 
 <script>
@@ -543,6 +555,67 @@ async function sellerAuth(action) {
     message.textContent = error.message;
   }
 }
+
+async function forgotSellerPassword() {
+  const email = document.getElementById("sellerEmail").value.trim();
+  const message = document.getElementById("sellerMessage");
+
+  if (!email) {
+    message.textContent = "Enter your email first.";
+    return;
+  }
+
+  message.textContent = "Sending password reset email...";
+
+  try {
+    const { error } = await sellerSupabase.auth.resetPasswordForEmail(
+      email,
+      {
+        redirectTo: window.location.origin + window.location.pathname
+      }
+    );
+
+    if (error) throw error;
+
+    message.textContent = "If the account exists, a reset email will be sent. Check your inbox.";
+  } catch (error) {
+    message.textContent = error.message;
+  }
+}
+
+async function updateSellerPassword() {
+  const password = document.getElementById("newSellerPassword").value;
+  const message = document.getElementById("resetPasswordMessage");
+
+  if (password.length < 6) {
+    message.textContent = "Password must be at least 6 characters.";
+    return;
+  }
+
+  message.textContent = "Updating password...";
+
+  try {
+    const { error } = await sellerSupabase.auth.updateUser({
+      password: password
+    });
+
+    if (error) throw error;
+
+    message.textContent = "Password updated successfully!";
+    document.getElementById("newSellerPassword").value = "";
+    document.getElementById("resetPasswordSection").style.display = "none";
+  } catch (error) {
+    message.textContent = error.message;
+  }
+}
+
+sellerSupabase.auth.onAuthStateChange((event) => {
+  if (event === "PASSWORD_RECOVERY") {
+    document.getElementById("resetPasswordSection").style.display = "block";
+    document.getElementById("resetPasswordSection").scrollIntoView();
+  }
+});
+
 </script>
 
   </body>
