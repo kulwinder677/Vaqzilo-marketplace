@@ -522,9 +522,10 @@ async function checkTracking() {
   </button>
   <p id="resetPasswordMessage" role="status"></p>
 </section>
-
 <script>
-const sellerSupabase = window.supabase.createClient(
+const SUPABASE_URL = "https://ggxmclalwlikepcqfhgv.supabase.co";
+const SUPABASE_ANON_KEY = sb_publishable_dktLqd-_G_AF6fM-dDBUqA_k0eVQ0Un 
+ const sellerSupabase = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
