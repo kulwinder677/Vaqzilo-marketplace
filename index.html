@@ -543,7 +543,13 @@ async function sellerAuth(action) {
 
   try {
     const result = action === "signup"
-      ? await sellerSupabase.auth.signUp({email, password})
+     ? await sellerSupabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: "https://kulwinder677.github.io/Vaqzilo-marketplace/"
+    }
+  })
       : await sellerSupabase.auth.signInWithPassword({email, password});
 
     if (result.error) throw result.error;
