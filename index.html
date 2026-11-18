@@ -498,6 +498,52 @@ async function checkTracking() {
   <button onclick="checkTracking()">Track Order</button>
   <p id="trackingResult"></p>
 </section>
+<section id="seller-auth" style="padding:20px;max-width:420px;margin:20px auto">
+  <h2>VAQZILO Seller Account</h2>
+  <input id="sellerEmail" type="email"
+    placeholder="Seller Email"
+    style="padding:12px;width:100%;margin:5px 0">
+  <input id="sellerPassword" type="password"
+    placeholder="Password (minimum 6 characters)"
+    style="padding:12px;width:100%;margin:5px 0">
+  <button onclick="sellerAuth('signup')">Sign Up</button>
+  <button onclick="sellerAuth('login')">Login</button>
+  <p id="sellerMessage" role="status"></p>
+</section>
+
+<script>
+const sellerSupabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+async function sellerAuth(action) {
+  const email = document.getElementById("sellerEmail").value.trim();
+  const password = document.getElementById("sellerPassword").value;
+  const message = document.getElementById("sellerMessage");
+
+  if (!email || password.length < 6) {
+    message.textContent = "Enter email and password (6+ characters).";
+    return;
+  }
+
+  message.textContent = "Please wait...";
+
+  try {
+    const result = action === "signup"
+      ? await sellerSupabase.auth.signUp({email, password})
+      : await sellerSupabase.auth.signInWithPassword({email, password});
+
+    if (result.error) throw result.error;
+
+    message.textContent = action === "signup"
+      ? "Account created. Check your email for confirmation if required."
+      : "Login successful!";
+  } catch (error) {
+    message.textContent = error.message;
+  }
+}
+</script>
 
   </body>
 </html>
