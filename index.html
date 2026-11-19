@@ -194,7 +194,7 @@ nav{justify-content:flex-start;gap:14px}
 <div id="checkout" class="page">
   <div class="panel">
     <h2>📦 Delivery Details</h2>
-    <form id="checkoutForm">
+    <form id="checkoutForm" onsubmit="placeDemoOrder(event)">
       <input class="field" id="customerName" placeholder="Full Name" required>
       <input class="field" id="customerEmail" type="email" placeholder="Email Address" required>
       <input class="field" id="customerAddress" placeholder="Street Address" required>
@@ -285,7 +285,21 @@ function showCheckout() {
   }
   showPage("checkout");
 }
-function filterProducts(value){
+function placeDemoOrder(event) {
+  event.preventDefault();
+
+  if (cart.length === 0) {
+    alert("Your cart is empty.");
+    return;
+  }
+
+  alert("Demo order placed successfully!");
+  cart = [];
+  save();
+  updateCount();
+  showPage("home");
+}
+ function filterProducts(value){
 filter=value;
 document.getElementById("searchInput").value="";
 showPage("home");
