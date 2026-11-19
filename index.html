@@ -4,79 +4,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#10182d">
 <title>VAQZILO Marketplace</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
- <style>
+<style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f4f5f8;color:#182033}
 button,input,select{font:inherit}
 button{cursor:pointer}
 header{background:#10182d;color:white;padding:15px}
-.top{display:flex;align-items:center;gap:15px;flex-wrap:wrap;max-width:1200px;margin:auto}
-.logo{font-size:30px;font-weight:900;letter-spacing:2px;color:white}
-.logo:after{content:"";display:block;width:70%;height:4px;background:#ff9100;border-radius:50%;margin-left:20px}
-.search{display:flex;flex:1;min-width:220px}
-.search input{width:100%;padding:13px;border:0;border-radius:10px 0 0 10px;outline:none}
-.search button{background:#ff9100;border:0;color:white;padding:0 18px;border-radius:0 10px 10px 0}
-.actions{display:flex;gap:8px}
-.actions button{background:none;border:0;color:white;font-size:13px}
-nav{display:flex;gap:24px;justify-content:center;overflow-x:auto;padding:15px 5px}
-nav button{background:none;border:0;color:white;white-space:nowrap;font-weight:bold}
-nav button:hover{color:#ff9100}
+.top{max-width:1200px;margin:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:28px;font-weight:900;letter-spacing:2px;border-bottom:4px solid #ff9100}
+.search{display:flex;flex:1;min-width:200px}
+.search input{width:100%;padding:12px;border:0;border-radius:9px 0 0 9px}
+.search button{background:#ff9100;color:white;border:0;padding:12px;border-radius:0 9px 9px 0}
+.actions{display:flex;gap:10px}
+.actions button,nav button{background:none;border:0;color:white}
+nav{display:flex;gap:20px;overflow:auto;padding:17px 0 5px;justify-content:center}
+nav button{white-space:nowrap;font-weight:bold}
 main{max-width:1200px;margin:auto}
-.hero{margin:16px;background:linear-gradient(110deg,#111b34,#263b61,#ec8738);color:white;border-radius:17px;padding:35px;display:flex;align-items:center;min-height:290px}
-.hero h1{font-size:clamp(35px,6vw,65px);margin:10px 0}
-.hero p{font-size:19px}
-.hero-art{flex:1;text-align:center;font-size:90px}
-.btn{background:#ff9100;color:white;border:0;border-radius:9px;padding:12px 20px;font-weight:bold;margin:5px}
-.btn-outline{background:transparent;border:2px solid white}
-.categories{display:grid;grid-template-columns:repeat(9,minmax(95px,1fr));gap:10px;overflow-x:auto;padding:10px 16px}
-.category{background:white;border-radius:14px;text-align:center;padding:16px 5px;cursor:pointer;box-shadow:0 2px 8px #0000000b}
-.category span{display:block;font-size:34px;margin-bottom:8px}
-.category b{font-size:12px}
-section{padding:15px}
-.section-title{display:flex;justify-content:space-between;align-items:center}
-.section-title h2{font-size:24px}
-.products{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
-.product{background:white;border-radius:14px;padding:12px;position:relative;box-shadow:0 3px 10px #0000000d}
-.product img{width:100%;height:150px;object-fit:contain}
-.product h3{font-size:15px;min-height:36px}
-.price{color:#b11126;font-size:19px;font-weight:bold}
-.old{text-decoration:line-through;color:#777;font-size:13px;margin-left:6px}
-.discount{position:absolute;right:8px;top:8px;background:#e11d48;color:white;padding:5px;border-radius:7px;font-size:12px}
-.heart{position:absolute;left:8px;top:8px;background:white;border:0;border-radius:50%;font-size:21px}
-.add{width:100%;background:#ff9100;color:white;border:0;border-radius:9px;padding:11px;margin-top:10px;font-weight:bold}
-.banners{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:15px}
-.banner{padding:24px;border-radius:15px;min-height:180px;display:flex;align-items:center;gap:15px}
-.banner h2{margin:0;font-size:25px}
-.banner .emoji{font-size:65px}
-.seller-banner{background:linear-gradient(110deg,#592c96,#382174);color:white}
-.delivery-banner{background:linear-gradient(110deg,#91d4fa,#d2f1ff)}
-.banner button{background:white;border:0;border-radius:20px;padding:10px 17px;font-weight:bold;margin-top:10px}
-.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:white;margin:15px;border-radius:14px;padding:20px}
-.benefit span{font-size:28px}
-.benefit b{display:block}
-.benefit small{color:#666}
 .page{display:none}
 .page.active{display:block}
-.panel{background:white;padding:22px;border-radius:14px;margin:18px}
-.field{width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;border-radius:8px}
-.cart-row{padding:13px 0;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;gap:10px}
-footer{background:#10182d;color:white;text-align:center;padding:25px;margin-top:20px}
-.note{color:#666;font-size:12px}
+.hero{margin:16px;padding:35px;border-radius:18px;min-height:250px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(110deg,#111b34,#263b61,#ec8738);color:white}
+.hero h1{font-size:clamp(36px,7vw,65px);margin:8px 0}
+.hero-art{font-size:75px}
+.btn{background:#ff9100;color:white;border:0;border-radius:9px;padding:12px 19px;font-weight:bold;margin:5px}
+.btn-outline{background:transparent;border:2px solid white}
+.categories{display:flex;gap:10px;overflow:auto;padding:15px}
+.category{background:white;min-width:115px;border-radius:13px;text-align:center;padding:17px 7px;cursor:pointer}
+.category span{display:block;font-size:30px;margin-bottom:8px}
+.category b{font-size:12px}
+section{padding:15px}
+.products{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.product{background:white;border-radius:14px;padding:12px;position:relative}
+.product img{width:100%;height:150px;object-fit:contain}
+.product h3{font-size:15px}
+.price{color:#b11126;font-size:19px;font-weight:bold}
+.heart{position:absolute;top:8px;left:8px;border:0;border-radius:50%;background:white;font-size:22px}
+.add{width:100%;background:#ff9100;color:white;border:0;border-radius:9px;padding:11px;margin-top:10px}
+.panel{background:white;margin:18px;padding:22px;border-radius:14px}
+.field{display:block;width:100%;padding:13px;margin:9px 0;border:1px solid #ddd;border-radius:9px}
+.cart-row{padding:13px 0;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.banner{margin:15px;padding:25px;border-radius:15px;background:linear-gradient(110deg,#592c96,#382174);color:white}
+.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:15px}
+.benefit{background:white;border-radius:12px;padding:20px}
+.benefit b{display:block;margin:8px 0}
+.note{font-size:13px;color:#666}
+.warning{background:#fff2d6;padding:13px;border-radius:10px;color:#805400}
+.status{white-space:pre-wrap;font-size:14px}
+.hidden{display:none!important}
+footer{background:#10182d;color:white;text-align:center;padding:25px;margin-top:25px}
 @media(max-width:750px){
 .top{gap:10px}
-.logo{font-size:25px}
+.logo{font-size:24px}
 .search{order:3;flex-basis:100%}
 .actions{margin-left:auto}
-.actions button{font-size:11px}
-nav{justify-content:flex-start;gap:14px}
-.hero{padding:22px;min-height:220px}
-.hero-art{font-size:55px}
-.hero p{font-size:14px}
+.actions button{font-size:12px}
+nav{justify-content:flex-start}
+.hero{padding:23px;min-height:210px}
+.hero-art{font-size:45px}
 .products{grid-template-columns:repeat(2,minmax(0,1fr))}
 .product img{height:120px}
-.banners{grid-template-columns:1fr}
 .benefits{grid-template-columns:1fr 1fr}
 }
 </style>
@@ -87,27 +75,27 @@ nav{justify-content:flex-start;gap:14px}
 <div class="top">
 <div class="logo">VAQZILO</div>
 <div class="search">
-<input id="searchInput" placeholder="Search for products, brands and more..." oninput="renderProducts()">
+<input id="searchInput" placeholder="Search products..." oninput="renderProducts()">
 <button onclick="renderProducts()">🔍</button>
 </div>
 <div class="actions">
 <button onclick="showPage('seller')">🏪 Sell</button>
 <button onclick="showPage('account')">👤 Account</button>
-<button onclick="showPage('cart')">🛒 Cart <span id="cartCount">0</span></button>
+<button onclick="showPage('cart')">🛒 <span id="cartCount">0</span></button>
 </div>
 </div>
 <nav>
-<button onclick="showPage('home')">⌂ Home</button>
+<button onclick="showPage('home')">Home</button>
 <button onclick="filterProducts('all')">🔥 Deals</button>
-<button onclick="filterProducts('new')">✨ New Arrivals</button>
+<button onclick="filterProducts('new')">✨ New</button>
 <button onclick="filterProducts('best')">⭐ Best Sellers</button>
 <button onclick="showPage('wishlist')">♡ Wishlist</button>
+<button onclick="showPage('tracking')">🚚 Tracking</button>
 </nav>
 </header>
 
 <main>
 <div id="home" class="page active">
-
 <div class="hero">
 <div>
 <h2>Buy & Sell on</h2>
@@ -122,44 +110,51 @@ nav{justify-content:flex-start;gap:14px}
 <div class="categories" id="categories"></div>
 
 <section id="deals">
-<div class="section-title">
 <h2>⚡ Today's Deals</h2>
-<button class="btn" onclick="filterProducts('all')">View All →</button>
-</div>
 <div class="products" id="productGrid"></div>
 </section>
 
-<div class="banners">
-<div class="banner seller-banner">
-<div class="emoji">🏪</div>
-<div>
-<h2>Become a Seller on VAQZILO</h2>
-<p>Start selling your products today.</p>
-<button onclick="showPage('seller')">Start Selling →</button>
-</div>
-</div>
-<div class="banner delivery-banner">
-<div class="emoji">🚚</div>
-<div>
-<h2>Fast & Reliable Delivery</h2>
-<p>Shop with confidence.</p>
-<button onclick="alert('Delivery integration coming soon.')">Learn More →</button>
-</div>
-</div>
+<div class="banner">
+<h2>🏪 Become a VAQZILO Seller</h2>
+<p>Start selling your products online.</p>
+<button class="btn" onclick="showPage('seller')">Start Selling →</button>
 </div>
 
 <div class="benefits">
-<div class="benefit"><span>🛡️</span><b>Secure Payments</b><small>Coming soon</small></div>
-<div class="benefit"><span>🚚</span><b>Fast Delivery</b><small>Coming soon</small></div>
-<div class="benefit"><span>🔄</span><b>Easy Returns</b><small>Coming soon</small></div>
-<div class="benefit"><span>🎧</span><b>Customer Support</b><small>Coming soon</small></div>
+<div class="benefit">🛡️<b>Payments</b><small>Not enabled</small></div>
+<div class="benefit">🚚<b>Delivery</b><small>Coming soon</small></div>
+<div class="benefit">🔄<b>Returns</b><small>Coming soon</small></div>
+<div class="benefit">🎧<b>Support</b><small>Coming soon</small></div>
+</div>
+</div>
+
+<div id="account" class="page">
+<div class="panel">
+<h2>👤 My Account</h2>
+<div id="signedOut">
+<input class="field" id="accountEmail" type="email" autocomplete="email" placeholder="Email Address">
+<input class="field" id="accountPassword" type="password" minlength="6" placeholder="Password (minimum 6 characters)">
+<button class="btn" onclick="accountAuth('signup')">Sign Up</button>
+<button class="btn" onclick="accountAuth('login')">Login</button>
+<button class="btn" onclick="forgotPassword()">Forgot Password?</button>
+</div>
+<div id="signedIn" class="hidden">
+<p>Signed in as: <strong id="currentEmail"></strong></p>
+<button class="btn" onclick="logout()">Log Out</button>
+</div>
+<p id="accountMessage" class="status" role="status"></p>
+<div id="resetBox" class="hidden">
+<h3>Create New Password</h3>
+<input class="field" id="newPassword" type="password" minlength="6" placeholder="New Password">
+<button class="btn" onclick="updatePassword()">Save New Password</button>
+</div>
 </div>
 </div>
 
 <div id="seller" class="page">
 <div class="panel">
 <h2>🏪 Seller Center</h2>
-<p>List a product on VAQZILO.</p>
+<p class="warning">You must be logged in and have an approved seller record before publishing products.</p>
 <form id="sellerForm">
 <input class="field" id="sellerName" placeholder="Seller Name" required>
 <input class="field" id="productName" placeholder="Product Name" required>
@@ -177,16 +172,10 @@ nav{justify-content:flex-start;gap:14px}
 </select>
 <button class="btn" type="submit">Publish Product</button>
 </form>
-<p class="note">Demo only: products are saved in this browser, not shared with other users.</p>
+<p id="sellerMessage" class="status"></p>
 <h3>📦 Seller Orders</h3>
-<p>View orders for your products.</p>
-
-<button class="btn" type="button" onclick="loadSellerOrders()">
-  View My Orders
-</button>
-<div id="sellerOrdersList"></div>
-
-
+<p class="note">Seller order management requires a secure order-items system. This feature is not active yet.</p>
+<button class="btn" onclick="showPage('account')">Account Login</button>
 </div>
 </div>
 
@@ -195,26 +184,22 @@ nav{justify-content:flex-start;gap:14px}
 <h2>🛒 Shopping Cart</h2>
 <div id="cartItems"></div>
 <h2 id="cartTotal">Total: CAD $0.00</h2>
-<button class="btn" onclick="showCheckout()">Checkout</button>
+<button class="btn" onclick="showCheckout()">Demo Checkout</button>
+</div>
+</div>
 
-</div>
-</div>
- 
 <div id="checkout" class="page">
-  <div class="panel">
-    <h2>📦 Delivery Details</h2>
-    <form id="checkoutForm" onsubmit="placeDemoOrder(event)">
-      <input class="field" id="customerName" placeholder="Full Name" required>
-      <input class="field" id="customerEmail" type="email" placeholder="Email Address" required>
-      <input class="field" id="customerAddress" placeholder="Street Address" required>
-      <input class="field" id="customerCity" placeholder="City" required>
-      <input class="field" id="customerPostal" placeholder="Postal Code" required>
-      <button class="btn" type="submit">Place Demo Order</button>
-    </form>
-    <p class="note">Demo only — no payment will be charged.</p>
-  </div>
+<div class="panel">
+<h2>📦 Demo Checkout</h2>
+<p class="warning">Testing only. No payment or real order will be processed. Do not enter real delivery information.</p>
+<form onsubmit="placeDemoOrder(event)">
+<input class="field" id="customerName" placeholder="Test Customer Name" required>
+<input class="field" id="customerCity" placeholder="Test City" required>
+<button class="btn" type="submit">Place Demo Order</button>
+</form>
+<p id="checkoutMessage" role="status"></p>
 </div>
-
+</div>
 
 <div id="wishlist" class="page">
 <div class="panel">
@@ -223,12 +208,13 @@ nav{justify-content:flex-start;gap:14px}
 </div>
 </div>
 
-<div id="account" class="page">
+<div id="tracking" class="page">
 <div class="panel">
-<h2>👤 My Account</h2>
-<input class="field" type="email" placeholder="Email">
-<input class="field" type="password" placeholder="Password">
-<button class="btn" onclick="alert('Secure login is coming soon.')">Login / Sign Up</button>
+<h2>🚚 Track Your Order</h2>
+<input class="field" id="trackingInput" placeholder="Tracking Number">
+<input class="field" id="verificationInput" placeholder="Verification Code">
+<button class="btn" onclick="checkTracking()">Track Order</button>
+<p id="trackingResult" role="status"></p>
 </div>
 </div>
 </main>
@@ -240,6 +226,11 @@ nav{justify-content:flex-start;gap:14px}
 </footer>
 
 <script>
+const SUPABASE_URL="https://ggxmclalwlikepcqfhgv.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_dktLqd-_G_AF6fM-dDBUqA_k0eVQ0Un";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const redirectUrl=window.location.origin+window.location.pathname;
+
 const categories=[
 ["📱","Electronics"],
 ["🛋️","Home & Living"],
@@ -253,135 +244,42 @@ const categories=[
 ];
 
 const starter=[
-{name:"Wireless Headphones",price:59.99,old:99.99,category:"Electronics",tag:"best",image:"https://placehold.co/400x300?text=Headphones"},
-{name:"Smart Watch",price:64.99,old:99.99,category:"Electronics",tag:"new",image:"https://placehold.co/400x300?text=Smart+Watch"},
-{name:"Air Fryer 5.5L",price:89.99,old:129.99,category:"Kitchen & Home",tag:"best",image:"https://placehold.co/400x300?text=Air+Fryer"},
-{name:"Men's Sneakers",price:74.99,old:99.99,category:"Fashion",tag:"new",image:"https://placehold.co/400x300?text=Sneakers"},
-{name:"Bluetooth Speaker",price:29.99,old:49.99,category:"Electronics",tag:"best",image:"https://placehold.co/400x300?text=Speaker"}
+{id:"demo-1",name:"Wireless Headphones",price:59.99,category:"Electronics",tag:"best",image:"https://placehold.co/400x300?text=Headphones",demo:true},
+{id:"demo-2",name:"Smart Watch",price:64.99,category:"Electronics",tag:"new",image:"https://placehold.co/400x300?text=Smart+Watch",demo:true},
+{id:"demo-3",name:"Air Fryer 5.5L",price:89.99,category:"Kitchen & Home",tag:"best",image:"https://placehold.co/400x300?text=Air+Fryer",demo:true},
+{id:"demo-4",name:"Men's Sneakers",price:74.99,category:"Fashion",tag:"new",image:"https://placehold.co/400x300?text=Sneakers",demo:true},
+{id:"demo-5",name:"Bluetooth Speaker",price:29.99,category:"Electronics",tag:"best",image:"https://placehold.co/400x300?text=Speaker",demo:true}
 ];
 
-function load(key,fallback){
+let products=[...starter];
+let cart=[];
+let wishlist=[];
+let filter="all";
+
+function readArray(key){
 try{
 const value=JSON.parse(localStorage.getItem(key));
-return Array.isArray(value)?value:fallback;
-}catch(e){return fallback;}
+return Array.isArray(value)?value:[];
+}catch(e){return [];}
 }
-
-let products=load("vqProducts",starter);
-let cart=load("vqCart",[]);
-let wishlist=load("vqWishlist",[]);
-let filter="all";
 
 function save(){
 try{
-localStorage.setItem("vqProducts",JSON.stringify(products));
-localStorage.setItem("vqCart",JSON.stringify(cart));
-localStorage.setItem("vqWishlist",JSON.stringify(wishlist));
-}catch(e){alert("Storage unavailable.");}
+localStorage.setItem("vqCartIds",JSON.stringify(cart));
+localStorage.setItem("vqWishlistIds",JSON.stringify(wishlist));
+}catch(e){console.warn("Storage unavailable",e);}
 }
 
 function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.getElementById(id).classList.add("active");
+document.querySelectorAll(".page").forEach(p=>{
+p.classList.toggle("active",p.id===id);
+});
 if(id==="cart")renderCart();
 if(id==="wishlist")renderWishlist();
 window.scrollTo(0,0);
 }
-function showCheckout() {
-  if (cart.length === 0) {
-    alert("Your cart is empty.");
-    return;
-  }
-  showPage("checkout");
-}
 
-async function placeDemoOrder(event) {
-  event.preventDefault();
-
-  if (cart.length === 0) {
-    alert("Your cart is empty.");
-    return;
-  }
-
-  const { data: { user } } =
-    await sellerSupabase.auth.getUser();
-
-  if (!user) {
-    alert("Please login first.");
-    return;
-  }
-
-  const total = cart.reduce((sum, index) =>
-    sum + Number(products[index]?.price || 0), 0);
-
-  const { error } = await sellerSupabase
-    .from("orders")
-    .insert({
-      buyer_id: user.id,
-     customer_name: document.getElementById("customerName").value.trim(),
-      customer_email: document.getElementById("customerEmail").value.trim(),
-      customer_address: document.getElementById("customerAddress").value.trim(),
-      customer_city: document.getElementById("customerCity").value.trim(),
-      customer_postal: document.getElementById("customerPostal").value.trim(),
-      total_amount: total,
-      status: "pending"
-    });
-
-  if (error) {
-    alert("Order failed: " + error.message);
-    return;
-  }
-
-  alert("Demo order saved successfully!");
-  cart = [];
-  save();
-  updateCount();
-  showPage("home");
-}
-
-async function loadSellerOrders() {
-  const area = document.getElementById("sellerOrdersList");
-  area.textContent = "Loading orders...";
-
-  try {
-    const { data: { user }, error: authError } =
-      await sellerSupabase.auth.getUser();
-
-    if (authError || !user) {
-      area.textContent = "Please log in first.";
-      return;
-    }
-
-    const { data: orders, error } = await sellerSupabase
-      .from("orders")
-      .select("id, status, total_amount, created_at")
-      .eq("buyer_id", user.id)
-      .order("created_at", { ascending: false });
-
-    if (error) throw error;
-
-    area.replaceChildren();
-
-    if (!orders || orders.length === 0) {
-      area.textContent = "No orders found.";
-      return;
-    }
-
-    orders.forEach(order => {
-      const item = document.createElement("p");
-      item.textContent =
-        "Order: " + order.id +
-        " | CAD $" + order.total_amount +
-        " | Status: " + order.status;
-      area.appendChild(item);
-    });
-
-  } catch (error) {
-    area.textContent = "Error: " + error.message;
-  }
-}
-
- function filterProducts(value){
+function filterProducts(value){
 filter=value;
 document.getElementById("searchInput").value="";
 showPage("home");
@@ -391,6 +289,7 @@ document.getElementById("deals").scrollIntoView();
 
 function renderCategories(){
 const area=document.getElementById("categories");
+area.replaceChildren();
 categories.forEach(c=>{
 const item=document.createElement("div");
 item.className="category";
@@ -404,22 +303,31 @@ area.append(item);
 });
 }
 
+function getProduct(id){
+return products.find(p=>p.id===id);
+}
+
 function renderProducts(){
 const area=document.getElementById("productGrid");
 area.replaceChildren();
 const search=document.getElementById("searchInput").value.toLowerCase();
-products.forEach((p,i)=>{
+
+products.forEach(p=>{
 if(!p.name.toLowerCase().includes(search))return;
 if(filter!=="all"&&p.category!==filter&&p.tag!==filter)return;
 
 const card=document.createElement("div");
 card.className="product";
+
 const heart=document.createElement("button");
 heart.className="heart";
-heart.textContent=wishlist.includes(i)?"♥":"♡";
+heart.textContent=wishlist.includes(p.id)?"♥":"♡";
 heart.onclick=()=>{
-wishlist=wishlist.includes(i)?wishlist.filter(x=>x!==i):[...wishlist,i];
-save();renderProducts();
+wishlist=wishlist.includes(p.id)
+?wishlist.filter(x=>x!==p.id)
+:[...wishlist,p.id];
+save();
+renderProducts();
 };
 
 const img=document.createElement("img");
@@ -431,33 +339,29 @@ img.src="https://placehold.co/400x300?text=Product";
 };
 
 const name=document.createElement("h3");
-name.textContent=p.name;
+name.textContent=p.name+(p.demo?" (Demo)":"");
+
 const price=document.createElement("div");
 price.className="price";
-price.textContent="$"+Number(p.price).toFixed(2)+" CAD";
-
-if(p.old&&p.old>p.price){
-const old=document.createElement("span");
-old.className="old";
-old.textContent="$"+Number(p.old).toFixed(2);
-price.append(old);
-const badge=document.createElement("span");
-badge.className="discount";
-badge.textContent="-"+Math.round((1-p.price/p.old)*100)+"%";
-card.append(badge);
-}
+price.textContent="CAD $"+Number(p.price).toFixed(2);
 
 const add=document.createElement("button");
 add.className="add";
 add.textContent="🛒 Add to Cart";
 add.onclick=()=>{
-cart.push(i);save();updateCount();
-alert("Added to cart!");
+cart.push(p.id);
+save();
+updateCount();
+alert("Added to demo cart!");
 };
+
 card.append(heart,img,name,price,add);
 area.append(card);
 });
-if(!area.children.length)area.textContent="No products found.";
+
+if(!area.children.length){
+area.textContent="No products found.";
+}
 }
 
 function updateCount(){
@@ -468,23 +372,29 @@ function renderCart(){
 const area=document.getElementById("cartItems");
 area.replaceChildren();
 let total=0;
-cart.forEach((index,pos)=>{
-const p=products[index];
+
+cart.forEach((id,pos)=>{
+const p=getProduct(id);
 if(!p)return;
 total+=Number(p.price);
+
 const row=document.createElement("div");
 row.className="cart-row";
 const label=document.createElement("span");
-label.textContent=p.name+" — $"+Number(p.price).toFixed(2);
+label.textContent=p.name+" — CAD $"+Number(p.price).toFixed(2);
 const remove=document.createElement("button");
 remove.className="btn";
 remove.textContent="Remove";
 remove.onclick=()=>{
-cart.splice(pos,1);save();updateCount();renderCart();
+cart.splice(pos,1);
+save();
+updateCount();
+renderCart();
 };
 row.append(label,remove);
 area.append(row);
 });
+
 if(!cart.length)area.textContent="Your cart is empty.";
 document.getElementById("cartTotal").textContent="Total: CAD $"+total.toFixed(2);
 }
@@ -492,329 +402,292 @@ document.getElementById("cartTotal").textContent="Total: CAD $"+total.toFixed(2)
 function renderWishlist(){
 const area=document.getElementById("wishlistItems");
 area.replaceChildren();
-wishlist.forEach(index=>{
-const p=products[index];
+
+wishlist.forEach(id=>{
+const p=getProduct(id);
 if(!p)return;
+
 const row=document.createElement("div");
 row.className="cart-row";
 const label=document.createElement("span");
 label.textContent=p.name;
-const btn=document.createElement("button");
-btn.className="btn";
-btn.textContent="Add to Cart";
-btn.onclick=()=>{
-cart.push(index);save();updateCount();
+const button=document.createElement("button");
+button.className="btn";
+button.textContent="Add to Cart";
+button.onclick=()=>{
+cart.push(id);
+save();
+updateCount();
 alert("Added to cart!");
 };
-row.append(label,btn);
+row.append(label,button);
 area.append(row);
 });
-if(!wishlist.length)area.textContent="Your wishlist is empty.";
+
+if(!area.children.length)area.textContent="Your wishlist is empty.";
 }
 
+function showCheckout(){
+if(!cart.length){
+alert("Your cart is empty.");
+return;
+}
+showPage("checkout");
+}
 
-document.getElementById("sellerForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
+function placeDemoOrder(event){
+event.preventDefault();
+document.getElementById("checkoutMessage").textContent=
+"Demo order completed. No payment charged and no order saved to the database.";
+cart=[];
+save();
+updateCount();
+}
 
-  const name = document.getElementById("productName").value.trim();
-  const price = Number(document.getElementById("productPrice").value);
-  const image = document.getElementById("productImage").value.trim();
-  const category = document.getElementById("productCategory").value;
-  const button = this.querySelector('button[type="submit"]');
+async function loadSupabaseProducts(){
+try{
+const {data,error}=await db.from("products")
+.select("id,title,price,image_url,description")
+.order("created_at",{ascending:false});
 
-  if (!name || !Number.isFinite(price) || price <= 0) {
-    alert("Enter a valid product name and price.");
-    return;
-  }
+if(error)throw error;
 
-  button.disabled = true;
-  button.textContent = "Publishing...";
+const remote=(data||[]).map(p=>({
+id:"db-"+p.id,
+name:p.title,
+price:Number(p.price),
+image:p.image_url||"https://placehold.co/400x300?text=Product",
+category:"Electronics",
+tag:"new",
+demo:false
+}));
 
-  try {
-    const { data: { user }, error: authError } =
-      await sellerSupabase.auth.getUser();
-
-    if (authError || !user) {
-      throw new Error("Please login to your Seller Account first.");
-    }
-
-    const { data: seller, error: sellerError } =
-      await sellerSupabase
-        .from("sellers")
-        .select("id")
-        .eq("user_id", user.id)
-        .single();
-
-    if (sellerError || !seller) {
-      throw new Error("Seller store not found for this account.");
-    }
-
-    const { error } = await sellerSupabase
-      .from("products")
-      .insert({
-        seller_id: seller.id,
-        title: name,
-        description: "Category: " + category,
-        price: price,
-        currency: "CAD",
-        image_url: image || null,
-        stock: 1
-      });
-
-    if (error) throw error;
-
-    this.reset();
-    alert("Product published to VAQZILO database!");
-
-  } catch (error) {
-    alert("Publishing failed: " + error.message);
-  } finally {
-    button.disabled = false;
-    button.textContent = "Publish Product";
-  }
-});
-
-
-renderCategories();
+products=[...remote,...starter];
+cart=cart.filter(id=>!!getProduct(id));
+wishlist=wishlist.filter(id=>!!getProduct(id));
+save();
 renderProducts();
 updateCount();
-async function loadSupabaseProducts() {
-  try {
-    const { data, error } = await sellerSupabase
-      .from("products")
-      .select("id,title,price,image_url,description")
-      .order("created_at", { ascending: false });
-
-    if (error) throw error;
-
-    const databaseProducts = (data || []).map(p => ({
-      name: p.title,
-      price: Number(p.price),
-      image: p.image_url || "https://placehold.co/400x300?text=Product",
-      category: "Electronics",
-      tag: "new"
-    }));
-
-    products = [
-      ...databaseProducts,
-      ...load("vqProducts", starter)
-    ];
-
-    
-    renderProducts();
-    updateCount();
-
-  } catch (error) {
-    console.error("Product loading failed:", error.message);
-  }
+}catch(e){
+console.warn("Product loading failed:",e.message);
+}
 }
 
-window.addEventListener("load", loadSupabaseProducts);
-
- // VAQZILO Supabase configuration
-const SUPABASE_URL = "https://ggxmclalwlikepcqfhgv.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_dktLqd-_G_AF6fM-dDBUqA_k0eVQ0Un";
-async function trackShipment(trackingNumber) {
-  const response = await fetch(
-    `${SUPABASE_URL}/rest/v1/shipments?tracking_number=eq.${encodeURIComponent(trackingNumber)}&select=status,carrier,shipped_at,delivered_at`,
-    {
-      headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`
-      }
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error("Tracking request failed");
-  }
-
-  return await response.json();
+function setAuthUI(user){
+document.getElementById("signedOut").classList.toggle("hidden",!!user);
+document.getElementById("signedIn").classList.toggle("hidden",!user);
+document.getElementById("currentEmail").textContent=user?.email||"";
 }
 
-async function checkTracking() {
-  const number = document.getElementById("trackingInput").value.trim();
-  const code = document.getElementById("verificationInput").value.trim();
-  const result = document.getElementById("trackingResult");
+async function accountAuth(action){
+const email=document.getElementById("accountEmail").value.trim();
+const password=document.getElementById("accountPassword").value;
+const message=document.getElementById("accountMessage");
 
-  if (!number || !code) {
-    result.textContent = "Enter tracking number and verification code.";
-    return;
-  }
-
-  result.textContent = "Checking your order...";
-
-  try {
-    const response = await fetch(
-      `${SUPABASE_URL}/functions/v1/track-order`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_ANON_KEY,
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
-        },
-        body: JSON.stringify({
-          tracking_number: number,
-          verification_code: code
-        })
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      result.textContent =
-        data.error || "Unable to track order.";
-      return;
-    }
-
-    result.textContent =
-      "Shipping Status: " + data.shipping_status +
-      " | Carrier: " + (data.shipping_carrier || "Not assigned");
-  } catch (error) {
-    result.textContent = "Unable to connect to tracking service.";
-  }
+if(!email||password.length<6){
+message.textContent="Enter email and password (minimum 6 characters).";
+return;
 }
 
-</script>
-  
-<section id="tracking-section" style="padding:20px;text-align:center">
-  <h2>Track Your Order</h2>
-  <input id="trackingInput" type="text"
-    placeholder="Enter tracking number">
-<input id="verificationInput" type="text" placeholder="Enter verification code" autocomplete="off">
+message.textContent="Please wait...";
 
-  <button onclick="checkTracking()">Track Order</button>
-  <p id="trackingResult"></p>
-</section>
-<section id="seller-auth" style="padding:20px;max-width:420px;margin:20px auto">
-  <h2>VAQZILO Seller Account</h2>
-  <input id="sellerEmail" type="email"
-    placeholder="Seller Email"
-    style="padding:12px;width:100%;margin:5px 0">
-  <input id="sellerPassword" type="password"
-    placeholder="Password (minimum 6 characters)"
-    style="padding:12px;width:100%;margin:5px 0">
-  <button onclick="sellerAuth('signup')">Sign Up</button>
-  <button onclick="sellerAuth('login')">Login</button>
-<button type="button" onclick="forgotSellerPassword()">Forgot Password?</button>
- <p id="sellerMessage" role="status"></p>
-</section>
-<section id="resetPasswordSection" style="display:none;padding:20px;max-width:420px;margin:20px auto">
-  <h2>Create New Password</h2>
-  <input id="newSellerPassword" type="password"
-    placeholder="New password (minimum 6 characters)"
-    minlength="6" autocomplete="new-password"
-    class="field">
-  <button type="button" onclick="updateSellerPassword()">
-    Save New Password
-  </button>
-  <p id="resetPasswordMessage" role="status"></p>
-</section>
-<script>
+try{
+const result=action==="signup"
+?await db.auth.signUp({
+email,password,
+options:{emailRedirectTo:redirectUrl}
+})
+:await db.auth.signInWithPassword({email,password});
 
- const sellerSupabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
+if(result.error)throw result.error;
 
-async function sellerAuth(action) {
-  const email = document.getElementById("sellerEmail").value.trim();
-  const password = document.getElementById("sellerPassword").value;
-  const message = document.getElementById("sellerMessage");
+message.textContent=action==="signup"
+?"Signup request received. Check your email if confirmation is required."
+:"Login successful!";
 
-  if (!email || password.length < 6) {
-    message.textContent = "Enter email and password (6+ characters).";
-    return;
-  }
-
-  message.textContent = "Please wait...";
-
-  try {
-    const result = action === "signup"
-     ? await sellerSupabase.auth.signUp({
-    email,
-    password,
-    options: {
-      emailRedirectTo: "https://kulwinder677.github.io/Vaqzilo-marketplace/"
-    }
-  })
-      : await sellerSupabase.auth.signInWithPassword({email, password});
-
-    if (result.error) throw result.error;
-
-    message.textContent = action === "signup"
-      ? "Account created. Check your email for confirmation if required."
-      : "Login successful!";
-  } catch (error) {
-    message.textContent = error.message;
-  }
+if(result.data?.session){
+setAuthUI(result.data.user);
+}
+}catch(e){
+message.textContent=e.message;
+}
 }
 
-async function forgotSellerPassword() {
-  const email = document.getElementById("sellerEmail").value.trim();
-  const message = document.getElementById("sellerMessage");
+async function forgotPassword(){
+const email=document.getElementById("accountEmail").value.trim();
+const message=document.getElementById("accountMessage");
 
-  if (!email) {
-    message.textContent = "Enter your email first.";
-    return;
-  }
-
-  message.textContent = "Sending password reset email...";
-
-  try {
-    const { error } = await sellerSupabase.auth.resetPasswordForEmail(
-      email,
-      {
-        redirectTo: window.location.origin + window.location.pathname
-      }
-    );
-
-    if (error) throw error;
-
-    message.textContent = "If the account exists, a reset email will be sent. Check your inbox.";
-  } catch (error) {
-    message.textContent = error.message;
-  }
+if(!email){
+message.textContent="Enter your email first.";
+return;
 }
 
-async function updateSellerPassword() {
-  const password = document.getElementById("newSellerPassword").value;
-  const message = document.getElementById("resetPasswordMessage");
+message.textContent="Sending reset email...";
 
-  if (password.length < 6) {
-    message.textContent = "Password must be at least 6 characters.";
-    return;
-  }
-
-  message.textContent = "Updating password...";
-
-  try {
-    const { error } = await sellerSupabase.auth.updateUser({
-      password: password
-    });
-
-    if (error) throw error;
-
-    message.textContent = "Password updated successfully!";
-    document.getElementById("newSellerPassword").value = "";
-    document.getElementById("resetPasswordSection").style.display = "none";
-  } catch (error) {
-    message.textContent = error.message;
-  }
+try{
+const {error}=await db.auth.resetPasswordForEmail(email,{
+redirectTo:redirectUrl
+});
+if(error)throw error;
+message.textContent="If the account exists, check your email for a reset link.";
+}catch(e){
+message.textContent=e.message;
+}
 }
 
-sellerSupabase.auth.onAuthStateChange((event) => {
-  if (event === "PASSWORD_RECOVERY") {
-    document.getElementById("resetPasswordSection").style.display = "block";
-    document.getElementById("resetPasswordSection").scrollIntoView();
-  }
+async function updatePassword(){
+const password=document.getElementById("newPassword").value;
+const message=document.getElementById("accountMessage");
+
+if(password.length<6){
+message.textContent="Password must be at least 6 characters.";
+return;
+}
+
+try{
+const {error}=await db.auth.updateUser({password});
+if(error)throw error;
+message.textContent="Password updated successfully.";
+document.getElementById("newPassword").value="";
+document.getElementById("resetBox").classList.add("hidden");
+}catch(e){
+message.textContent=e.message;
+}
+}
+
+async function logout(){
+const {error}=await db.auth.signOut();
+document.getElementById("accountMessage").textContent=
+error?error.message:"Logged out.";
+if(!error)setAuthUI(null);
+}
+
+db.auth.onAuthStateChange((event,session)=>{
+setAuthUI(session?.user||null);
+if(event==="PASSWORD_RECOVERY"){
+document.getElementById("resetBox").classList.remove("hidden");
+showPage("account");
+}
 });
 
-</script>
+async function publishProduct(event){
+event.preventDefault();
 
-  </body>
+const form=event.currentTarget;
+const button=form.querySelector('button[type="submit"]');
+const message=document.getElementById("sellerMessage");
+const name=document.getElementById("productName").value.trim();
+const price=Number(document.getElementById("productPrice").value);
+const image=document.getElementById("productImage").value.trim();
+const category=document.getElementById("productCategory").value;
+
+if(!name||!Number.isFinite(price)||price<=0){
+message.textContent="Enter a valid product name and price.";
+return;
+}
+
+button.disabled=true;
+message.textContent="Publishing...";
+
+try{
+const {data:{user},error:authError}=await db.auth.getUser();
+
+if(authError||!user){
+throw new Error("Please log in first.");
+}
+
+const {data:seller,error:sellerError}=await db.from("sellers")
+.select("id")
+.eq("user_id",user.id)
+.single();
+
+if(sellerError||!seller){
+throw new Error("Seller record not found. Seller onboarding is required.");
+}
+
+const {error}=await db.from("products").insert({
+seller_id:seller.id,
+title:name,
+description:"Category: "+category,
+price:price,
+currency:"CAD",
+image_url:image||null,
+stock:1
+});
+
+if(error)throw error;
+
+form.reset();
+message.textContent="Product published successfully!";
+await loadSupabaseProducts();
+
+}catch(e){
+message.textContent="Publishing failed: "+e.message;
+}finally{
+button.disabled=false;
+}
+}
+
+async function checkTracking(){
+const number=document.getElementById("trackingInput").value.trim();
+const code=document.getElementById("verificationInput").value.trim();
+const result=document.getElementById("trackingResult");
+
+if(!number||!code){
+result.textContent="Enter tracking number and verification code.";
+return;
+}
+
+result.textContent="Checking...";
+
+try{
+const {data,error}=await db.functions.invoke("track-order",{
+body:{
+tracking_number:number,
+verification_code:code
+}
+});
+
+if(error)throw error;
+
+if(data?.error){
+result.textContent=data.error;
+return;
+}
+
+result.textContent=
+"Shipping Status: "+(data?.shipping_status||"Unknown")+
+" | Carrier: "+(data?.shipping_carrier||"Not assigned");
+
+}catch(e){
+result.textContent="Tracking unavailable. Please try again later.";
+}
+}
+
+async function init(){
+renderCategories();
+cart=readArray("vqCartIds").filter(x=>typeof x==="string");
+wishlist=readArray("vqWishlistIds").filter(x=>typeof x==="string");
+renderProducts();
+updateCount();
+
+document.getElementById("sellerForm")
+.addEventListener("submit",publishProduct);
+
+try{
+const {data:{session}}=await db.auth.getSession();
+setAuthUI(session?.user||null);
+}catch(e){
+console.warn(e);
+}
+
+await loadSupabaseProducts();
+}
+
+init();
+</script>
+</body>
 </html>
+
 
 
