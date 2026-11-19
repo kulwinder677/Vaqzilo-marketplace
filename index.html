@@ -393,30 +393,68 @@ area.append(row);
 if(!wishlist.length)area.textContent="Your wishlist is empty.";
 }
 
-document.getElementById("sellerForm").addEventListener("submit",function(e){
-e.preventDefault();
-const name=document.getElementById("productName").value.trim();
-const price=Number(document.getElementById("productPrice").value);
-const image=document.getElementById("productImage").value.trim();
-const category=document.getElementById("productCategory").value;
 
-if(!name||!Number.isFinite(price)||price<=0){
-alert("Enter a valid name and price.");
-return;
-}
+document.getElementById("sellerForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-products.push({
-name,price,category,tag:"new",
-image:image||"https://placehold.co/400x300?text=New+Product"
+  const name = document.getElementById("productName").value.trim();
+  const price = Number(document.getElementById("productPrice").value);
+  const image = document.getElementById("productImage").value.trim();
+  const category = document.getElementById("productCategory").value;
+  const button = this.querySelector('button[type="submit"]');
+
+  if (!name || !Number.isFinite(price) || price <= 0) {
+    alert("Enter a valid product name and price.");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Publishing...";
+
+  try {
+    const { data: { user }, error: authError } =
+      await sellerSupabase.auth.getUser();
+
+    if (authError || !user) {
+      throw new Error("Please login to your Seller Account first.");
+    }
+
+    const { data: seller, error: sellerError } =
+      await sellerSupabase
+        .from("sellers")
+        .select("id")
+        .eq("user_id", user.id)
+        .single();
+
+    if (sellerError || !seller) {
+      throw new Error("Seller store not found for this account.");
+    }
+
+    const { error } = await sellerSupabase
+      .from("products")
+      .insert({
+        seller_id: seller.id,
+        title: name,
+        description: "Category: " + category,
+        price: price,
+        currency: "CAD",
+        image_url: image || null,
+        stock: 1
+      });
+
+    if (error) throw error;
+
+    this.reset();
+    alert("Product published to VAQZILO database!");
+
+  } catch (error) {
+    alert("Publishing failed: " + error.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = "Publish Product";
+  }
 });
-save();
-this.reset();
-filter="all";
-document.getElementById("searchInput").value="";
-renderProducts();
-showPage("home");
-alert("Product added to demo!");
-});
+
 
 renderCategories();
 renderProducts();
