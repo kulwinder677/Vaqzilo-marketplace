@@ -278,7 +278,13 @@ if(id==="cart")renderCart();
 if(id==="wishlist")renderWishlist();
 window.scrollTo(0,0);
 }
-
+function showCheckout() {
+  if (cart.length === 0) {
+    alert("Your cart is empty.");
+    return;
+  }
+  showPage("checkout");
+}
 function filterProducts(value){
 filter=value;
 document.getElementById("searchInput").value="";
