@@ -459,7 +459,41 @@ document.getElementById("sellerForm").addEventListener("submit", async function(
 renderCategories();
 renderProducts();
 updateCount();
-// VAQZILO Supabase configuration
+async function loadSupabaseProducts() {
+  try {
+    const { data, error } = await sellerSupabase
+      .from("products")
+      .select("id,title,price,image_url,description")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    const databaseProducts = (data || []).map(p => ({
+      name: p.title,
+      price: Number(p.price),
+      image: p.image_url || "https://placehold.co/400x300?text=Product",
+      category: "Electronics",
+      tag: "new"
+    }));
+
+    products = [
+      ...databaseProducts,
+      ...load("vqProducts", starter)
+    ];
+
+    cart = [];
+    wishlist = [];
+    renderProducts();
+    updateCount();
+
+  } catch (error) {
+    console.error("Product loading failed:", error.message);
+  }
+}
+
+window.addEventListener("load", loadSupabaseProducts);
+
+ // VAQZILO Supabase configuration
 const SUPABASE_URL = "https://ggxmclalwlikepcqfhgv.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_dktLqd-_G_AF6fM-dDBUqA_k0eVQ0Un";
 async function trackShipment(trackingNumber) {
