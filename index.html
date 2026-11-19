@@ -339,6 +339,48 @@ async function placeDemoOrder(event) {
   showPage("home");
 }
 
+async function loadSellerOrders() {
+  const area = document.getElementById("sellerOrdersList");
+  area.textContent = "Loading orders...";
+
+  try {
+    const { data: { user }, error: authError } =
+      await sellerSupabase.auth.getUser();
+
+    if (authError || !user) {
+      area.textContent = "Please log in first.";
+      return;
+    }
+
+    const { data: orders, error } = await sellerSupabase
+      .from("orders")
+      .select("id, status, total_amount, created_at")
+      .eq("buyer_id", user.id)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    area.replaceChildren();
+
+    if (!orders || orders.length === 0) {
+      area.textContent = "No orders found.";
+      return;
+    }
+
+    orders.forEach(order => {
+      const item = document.createElement("p");
+      item.textContent =
+        "Order: " + order.id +
+        " | CAD $" + order.total_amount +
+        " | Status: " + order.status;
+      area.appendChild(item);
+    });
+
+  } catch (error) {
+    area.textContent = "Error: " + error.message;
+  }
+}
+
  function filterProducts(value){
 filter=value;
 document.getElementById("searchInput").value="";
