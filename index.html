@@ -803,15 +803,15 @@ const orderInfo=new Map(
       
 const customer=orderInfo.get(item.order_id);
 
+
 details.textContent=
-  
+  "Order: "+item.order_id+
+  " | Product: "+(names.get(item.product_id)||"Product")+
+  " | Qty: "+item.quantity+
+  " | CAD $"+Number(item.unit_price).toFixed(2)+
   " | Customer: "+(customer?.customer_name||"Not available")+
   " | City: "+(customer?.customer_city||"Not available");
 
-        "Order: "+item.order_id+
-        " | Product: "+(names.get(item.product_id)||"Product")+
-        " | Qty: "+item.quantity+
-        " | CAD $"+Number(item.unit_price).toFixed(2);
 
 const statusBox=document.createElement("div");
 
