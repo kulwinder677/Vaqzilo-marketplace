@@ -778,6 +778,19 @@ async function loadSellerOrders(){
       return;
     }
 
+const orderIds=[...new Set(items.map(item=>item.order_id))];
+
+const {data:orderDetails,error:detailsError}=await db
+  .from("orders")
+  .select("id,customer_name,customer_city")
+  .in("id",orderIds);
+
+if(detailsError)throw detailsError;
+
+const orderInfo=new Map(
+  (orderDetails||[]).map(o=>[o.id,o])
+);
+
     const names=new Map(myProducts.map(p=>[p.id,p.title]));
 
     items.forEach(item=>{
@@ -785,7 +798,17 @@ async function loadSellerOrders(){
       row.className="cart-row";
 
       const details=document.createElement("div");
-      details.textContent=
+      
+const customer=orderInfo.get(item.order_id);
+
+details.textContent=
+  "Order: "+item.order_id+
+  " | Product: "+(names.get(item.product_id)||"Product")+
+  " | Qty: "+item.quantity+
+  " | CAD $"+Number(item.unit_price).toFixed(2)+
+  " | Customer: "+(customer?.customer_name||"Not available")+
+  " | City: "+(customer?.customer_city||"Not available");
+
         "Order: "+item.order_id+
         " | Product: "+(names.get(item.product_id)||"Product")+
         " | Qty: "+item.quantity+
