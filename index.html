@@ -745,7 +745,9 @@ async function loadSellerOrders(){
 
     const {data:items,error:itemsError}=await db
       .from("order_items")
-      .select("order_id,product_id,quantity,unit_price")
+      
+.select("id,order_id,product_id,quantity,unit_price,fulfillment_status")
+
       .in("product_id",productIds);
 
     if(itemsError)throw itemsError;
@@ -768,7 +770,53 @@ async function loadSellerOrders(){
         " | Qty: "+item.quantity+
         " | CAD $"+Number(item.unit_price).toFixed(2);
 
-      row.append(details);
+const statusBox=document.createElement("div");
+
+const statusLabel=document.createElement("span");
+statusLabel.textContent=
+  "Status: "+(item.fulfillment_status||"pending")+" ";
+
+const statusSelect=document.createElement("select");
+statusSelect.className="field";
+
+["pending","processing","shipped","delivered"].forEach(status=>{
+  const option=document.createElement("option");
+  option.value=status;
+  option.textContent=status.charAt(0).toUpperCase()+status.slice(1);
+  statusSelect.append(option);
+});
+
+statusSelect.value=item.fulfillment_status||"pending";
+
+const updateButton=document.createElement("button");
+updateButton.className="btn";
+updateButton.textContent="Update Status";
+
+updateButton.onclick=async()=>{
+  updateButton.disabled=true;
+  updateButton.textContent="Updating...";
+
+  const {error}=await db.rpc("update_seller_order_status",{
+    p_order_item_id:item.id,
+    p_new_status:statusSelect.value
+  });
+
+  if(error){
+    alert("Update failed: "+error.message);
+  }else{
+    await loadSellerOrders();
+  }
+
+  updateButton.disabled=false;
+  updateButton.textContent="Update Status";
+};
+
+statusBox.append(statusLabel,statusSelect,updateButton);
+row.append(statusBox);
+
+      
+row.append(details,statusBox);
+
       list.append(row);
     });
 
