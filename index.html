@@ -596,14 +596,22 @@ if(authError||!user){
 throw new Error("Please log in first.");
 }
 
-const {data:seller,error:sellerError}=await db.from("sellers")
-.select("id")
-.eq("user_id",user.id)
-.single();
 
-if(sellerError||!seller){
-throw new Error("Seller record not found. Seller onboarding is required.");
+const {data:seller,error:sellerError}=await db
+  .from("sellers")
+  .select("id,status")
+  .eq("user_id",user.id)
+  .eq("status","approved")
+  .maybeSingle();
+
+if(sellerError){
+  throw new Error("Seller verification failed: "+sellerError.message);
 }
+
+if(!seller){
+  throw new Error("Approved seller record not accessible. Please check your seller account.");
+}
+
 
 const {error}=await db.from("products").insert({
 seller_id:seller.id,
