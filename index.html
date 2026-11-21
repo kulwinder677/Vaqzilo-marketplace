@@ -435,14 +435,83 @@ return;
 showPage("checkout");
 }
 
-function placeDemoOrder(event){
+
+async function placeDemoOrder(event){
 event.preventDefault();
-document.getElementById("checkoutMessage").textContent=
-"Demo order completed. No payment charged and no order saved to the database.";
+
+const message=document.getElementById("checkoutMessage");
+const button=event.currentTarget.querySelector('button[type="submit"]');
+
+const customerName=document.getElementById("customerName").value.trim();
+const customerCity=document.getElementById("customerCity").value.trim();
+
+if(!customerName||!customerCity||!cart.length){
+message.textContent="Please complete the form and add products.";
+return;
+}
+
+button.disabled=true;
+message.textContent="Saving test order...";
+
+try{
+const {data:{user},error:authError}=await db.auth.getUser();
+
+if(authError||!user){
+throw new Error("Please log in first.");
+}
+
+const items=cart.map(id=>getProduct(id));
+
+if(items.some(p=>!p)){
+throw new Error("Some products are unavailable.");
+}
+
+if(items.some(p=>p.demo)){
+throw new Error("Starter demo products cannot be saved as database orders. Add a published product.");
+}
+
+const total=items.reduce((sum,p)=>sum+Number(p.price),0);
+
+const {data:order,error:orderError}=await db
+.from("orders")
+.insert({
+buyer_id:user.id,
+total_amount:Number(total.toFixed(2))
+})
+.select("id")
+.single();
+
+if(orderError)throw orderError;
+
+const orderItems=items.map(p=>({
+order_id:order.id,
+product_id:p.id.replace("db-",""),
+quantity:1,
+price:Number(p.price)
+}));
+
+const {error:itemsError}=await db
+.from("order_items")
+.insert(orderItems);
+
+if(itemsError){
+message.textContent="Order created, but items could not be saved. Order ID: "+order.id+". Error: "+itemsError.message;
+return;
+}
+
+message.textContent="Test order saved successfully! Order ID: "+order.id+". No payment charged.";
+
 cart=[];
 save();
 updateCount();
+
+}catch(e){
+message.textContent="Order failed: "+e.message;
+}finally{
+button.disabled=false;
 }
+}
+
 
 async function loadSupabaseProducts(){
 try{
