@@ -780,10 +780,12 @@ async function loadSellerOrders(){
 
 const orderIds=[...new Set(items.map(item=>item.order_id))];
 
+
 const {data:orderDetails,error:detailsError}=await db
-  .from("orders")
-  .select("id,customer_name,customer_city")
-  .in("id",orderIds);
+  .rpc("get_seller_order_customers", {
+    p_order_ids:orderIds
+  });
+
 
 if(detailsError)throw detailsError;
 
@@ -802,10 +804,7 @@ const orderInfo=new Map(
 const customer=orderInfo.get(item.order_id);
 
 details.textContent=
-  "Order: "+item.order_id+
-  " | Product: "+(names.get(item.product_id)||"Product")+
-  " | Qty: "+item.quantity+
-  " | CAD $"+Number(item.unit_price).toFixed(2)+
+  
   " | Customer: "+(customer?.customer_name||"Not available")+
   " | City: "+(customer?.customer_city||"Not available");
 
