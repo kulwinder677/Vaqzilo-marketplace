@@ -500,7 +500,9 @@ const {data:order,error:orderError}=await db
 .from("orders")
 .insert({
 buyer_id:user.id,
-total_amount:Number(total.toFixed(2))
+total_amount:Number(total.toFixed(2)),
+customer_name:customerName,
+customer_city:customerCity
 })
 .select("id")
 .single();
