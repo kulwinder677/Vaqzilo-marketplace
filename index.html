@@ -90,7 +90,10 @@ nav{justify-content:flex-start}
 <button onclick="filterProducts('new')">✨ New</button>
 <button onclick="filterProducts('best')">⭐ Best Sellers</button>
 <button onclick="showPage('wishlist')">♡ Wishlist</button>
-<button onclick="showPage('tracking')">🚚 Tracking</button>
+
+<button onclick="showPage('myorders');loadBuyerOrders()">📦 My Orders</button>
+
+  <button onclick="showPage('tracking')">🚚 Tracking</button>
 </nav>
 </header>
 
@@ -211,6 +214,22 @@ nav{justify-content:flex-start}
 <h2>♡ Wishlist</h2>
 <div id="wishlistItems"></div>
 </div>
+</div>
+
+<div id="myorders" class="page">
+  <div class="panel">
+    <h2>📦 My Orders</h2>
+    <p class="note">
+      View your demo orders and delivery status.
+    </p>
+    <button class="btn" type="button"
+      onclick="loadBuyerOrders()">
+      Refresh My Orders
+    </button>
+    <p id="buyerOrdersMessage"
+       class="status" role="status"></p>
+    <div id="buyerOrdersList"></div>
+  </div>
 </div>
 
 <div id="tracking" class="page">
@@ -821,6 +840,101 @@ row.append(details,statusBox);
     });
 
     message.textContent=items.length+" order item(s) found.";
+
+  }catch(e){
+    message.textContent="Could not load orders: "+e.message;
+  }
+}
+
+async function loadBuyerOrders(){
+  const message=document.getElementById("buyerOrdersMessage");
+  const list=document.getElementById("buyerOrdersList");
+
+  list.replaceChildren();
+  message.textContent="Loading your orders...";
+
+  try{
+    const {data:{user},error:authError}=await db.auth.getUser();
+    if(authError||!user){
+      throw new Error("Please log in first.");
+    }
+
+    const {data:orders,error:ordersError}=await db
+      .from("orders")
+      .select("id,total_amount,created_at")
+      .eq("buyer_id",user.id)
+      .order("created_at",{ascending:false});
+
+    if(ordersError)throw ordersError;
+
+    if(!orders?.length){
+      message.textContent="You have no demo orders yet.";
+      return;
+    }
+
+    const orderIds=orders.map(o=>o.id);
+
+    const {data:items,error:itemsError}=await db
+      .from("order_items")
+      .select("order_id,product_id,quantity,unit_price,fulfillment_status")
+      .in("order_id",orderIds);
+
+    if(itemsError)throw itemsError;
+
+    const productIds=[...new Set((items||[]).map(i=>i.product_id))];
+    let names=new Map();
+
+    if(productIds.length){
+      const {data:productsData,error:productsError}=await db
+        .from("products")
+        .select("id,title")
+        .in("id",productIds);
+
+      if(productsError)throw productsError;
+      names=new Map((productsData||[]).map(p=>[p.id,p.title]));
+    }
+
+    orders.forEach(order=>{
+      const card=document.createElement("div");
+      card.className="panel";
+      card.style.margin="12px 0";
+
+      const heading=document.createElement("h3");
+      heading.textContent="Order #"+order.id.slice(0,8);
+
+      const total=document.createElement("p");
+      total.textContent="Total: CAD $"+
+        Number(order.total_amount).toFixed(2);
+
+      card.append(heading,total);
+
+      const orderItems=(items||[]).filter(i=>i.order_id===order.id);
+
+      orderItems.forEach(item=>{
+        const row=document.createElement("div");
+        row.className="cart-row";
+
+        const details=document.createElement("div");
+        details.textContent=
+          (names.get(item.product_id)||"Product")+
+          " | Qty: "+item.quantity+
+          " | CAD $"+Number(item.unit_price).toFixed(2)+
+          " | Status: "+(item.fulfillment_status||"pending");
+
+        row.append(details);
+        card.append(row);
+      });
+
+      if(!orderItems.length){
+        const note=document.createElement("p");
+        note.textContent="No items recorded for this test order.";
+        card.append(note);
+      }
+
+      list.append(card);
+    });
+
+    message.textContent=orders.length+" demo order(s) found.";
 
   }catch(e){
     message.textContent="Could not load orders: "+e.message;
