@@ -796,8 +796,77 @@ async function loadMyProducts(){
         " | CAD $"+Number(p.price).toFixed(2)+
         " | Stock: "+p.stock;
 
-      row.append(details);
-      list.append(row);
+    
+const priceInput=document.createElement("input");
+priceInput.className="field";
+priceInput.type="number";
+priceInput.min="0.01";
+priceInput.step="0.01";
+priceInput.value=p.price;
+priceInput.placeholder="Price CAD";
+priceInput.style.width="125px";
+
+const stockInput=document.createElement("input");
+stockInput.className="field";
+stockInput.type="number";
+stockInput.min="0";
+stockInput.step="1";
+stockInput.value=p.stock;
+stockInput.placeholder="Stock";
+stockInput.style.width="100px";
+
+const saveButton=document.createElement("button");
+saveButton.className="btn";
+saveButton.textContent="Save Changes";
+
+saveButton.onclick=async()=>{
+  const newPrice=Number(priceInput.value);
+  const newStock=Number(stockInput.value);
+
+  if(priceInput.value.trim()==="" ||
+     !Number.isFinite(newPrice) ||
+     newPrice<=0 ||
+     stockInput.value.trim()==="" ||
+     !Number.isSafeInteger(newStock) ||
+     newStock<0){
+    alert("Enter a valid price and whole-number stock.");
+    return;
+  }
+
+  saveButton.disabled=true;
+  saveButton.textContent="Saving...";
+
+  try{
+    const {data:updated,error}=await db
+      .from("products")
+      .update({
+        price:newPrice,
+        stock:newStock
+      })
+      .eq("id",p.id)
+      .eq("seller_id",seller.id)
+      .select("id");
+
+    if(error)throw error;
+    if(!updated?.length){
+      throw new Error("Product update not permitted.");
+    }
+
+    await loadSupabaseProducts();
+    await loadMyProducts();
+
+  }catch(e){
+    alert("Update failed: "+e.message);
+    saveButton.disabled=false;
+    saveButton.textContent="Save Changes";
+  }
+};
+
+row.style.flexWrap="wrap";
+row.append(details,priceInput,stockInput,saveButton);
+list.append(row);
+
+
     });
 
     message.textContent=items.length+" product(s) found.";
