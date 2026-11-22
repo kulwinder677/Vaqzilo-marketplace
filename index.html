@@ -558,9 +558,12 @@ button.disabled=false;
 
 async function loadSupabaseProducts(){
 try{
+
 const {data,error}=await db.from("products")
-.select("id,title,price,image_url,description")
-.order("created_at",{ascending:false});
+  .select("id,title,price,image_url,description")
+  .eq("is_active",true)
+  .order("created_at",{ascending:false});
+
 
 if(error)throw error;
 
@@ -775,7 +778,7 @@ async function loadMyProducts(){
 
     const {data:items,error}=await db
       .from("products")
-      .select("id,title,price,stock")
+      .select("id,title,price,stock,is_active")
       .eq("seller_id",seller.id)
       .order("created_at",{ascending:false});
 
@@ -862,9 +865,60 @@ saveButton.onclick=async()=>{
   }
 };
 
+      
+const visibilityButton=document.createElement("button");
+visibilityButton.className="btn";
+
+visibilityButton.textContent=p.is_active
+  ?"Unpublish"
+  :"Republish";
+
+visibilityButton.onclick=async()=>{
+  if(p.is_active &&
+     !confirm("Unpublish this product?")){
+    return;
+  }
+
+  visibilityButton.disabled=true;
+
+  try{
+    const {data:updated,error}=await db
+      .from("products")
+      .update({is_active:!p.is_active})
+      .eq("id",p.id)
+      .eq("seller_id",seller.id)
+      .select("id,is_active");
+
+    if(error)throw error;
+
+    if(!updated?.length){
+      throw new Error("Product update not permitted.");
+    }
+
+    await loadSupabaseProducts();
+    await loadMyProducts();
+
+  }catch(e){
+    alert("Update failed: "+e.message);
+    visibilityButton.disabled=false;
+  }
+};
+
+details.textContent+=
+  " | Status: "+(p.is_active?"Published":"Unpublished");
+
 row.style.flexWrap="wrap";
-row.append(details,priceInput,stockInput,saveButton);
+
+row.append(
+  details,
+  priceInput,
+  stockInput,
+  saveButton,
+  visibilityButton
+);
+
 list.append(row);
+
 
 
     });
