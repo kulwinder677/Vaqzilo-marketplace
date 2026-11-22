@@ -511,6 +511,36 @@ if(items.some(p=>p.demo)){
 throw new Error("Starter demo products cannot be saved as database orders. Add a published product.");
 }
 
+const {data:current,error:checkError}=await db
+  .from("products")
+  .select("id,price,stock,is_active")
+  .in("id",items.map(p=>p.id.replace("db-","")));
+
+if(checkError)throw checkError;
+
+for(const p of items){
+  const product=current?.find(
+    x=>x.id===p.id.replace("db-","")
+  );
+
+  const quantity=items.filter(
+    x=>x.id===p.id
+  ).length;
+
+  if(!product||!product.is_active||
+     product.stock<quantity){
+    throw new Error(
+      "Product unavailable or out of stock."
+    );
+  }
+
+  if(Number(product.price)!==Number(p.price)){
+    throw new Error(
+      "Product price changed. Refresh the page."
+    );
+  }
+}
+
 const total=items.reduce((sum,p)=>sum+Number(p.price),0);
 
 const {data:order,error:orderError}=await db
