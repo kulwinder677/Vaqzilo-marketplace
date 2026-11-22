@@ -176,6 +176,23 @@ nav{justify-content:flex-start}
 <button class="btn" type="submit">Publish Product</button>
 </form>
 <p id="sellerMessage" class="status"></p>
+
+<h3>📦 Manage My Products</h3>
+
+<p class="note">
+  View and manage your published products.
+</p>
+
+<button class="btn" type="button"
+  onclick="loadMyProducts()">
+  Refresh My Products
+</button>
+
+<p id="myProductsMessage"
+   class="status"></p>
+
+<div id="myProductsList"></div>
+
 <h3>📦 Seller Orders</h3>
 
 <p class="note">View orders containing your products. Demo orders only — no payments processed.</p>
@@ -729,6 +746,65 @@ message.textContent="Publishing failed: "+e.message;
 }finally{
 button.disabled=false;
 }
+}
+
+async function loadMyProducts(){
+  const message=document.getElementById("myProductsMessage");
+  const list=document.getElementById("myProductsList");
+
+  list.replaceChildren();
+  message.textContent="Loading products...";
+
+  try{
+    const {data:{user},error:authError}=await db.auth.getUser();
+
+    if(authError||!user){
+      throw new Error("Please log in first.");
+    }
+
+    const {data:seller,error:sellerError}=await db
+      .from("sellers")
+      .select("id")
+      .eq("user_id",user.id)
+      .eq("status","approved")
+      .single();
+
+    if(sellerError||!seller){
+      throw new Error("Approved seller account not found.");
+    }
+
+    const {data:items,error}=await db
+      .from("products")
+      .select("id,title,price,stock")
+      .eq("seller_id",seller.id)
+      .order("created_at",{ascending:false});
+
+    if(error)throw error;
+
+    if(!items?.length){
+      message.textContent="No products found.";
+      return;
+    }
+
+    items.forEach(p=>{
+      const row=document.createElement("div");
+      row.className="cart-row";
+
+      const details=document.createElement("div");
+      details.textContent=
+        p.title+
+        " | CAD $"+Number(p.price).toFixed(2)+
+        " | Stock: "+p.stock;
+
+      row.append(details);
+      list.append(row);
+    });
+
+    message.textContent=items.length+" product(s) found.";
+
+  }catch(e){
+    message.textContent="Could not load products: "+e.message;
+  }
 }
 
 async function loadSellerOrders(){
